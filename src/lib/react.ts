@@ -9,7 +9,7 @@ export class React {
       children,
     };
 
-    if (typeof elementType === 'function') {
+    if (typeof elementType === "function") {
       return elementType(virtualElementProps);
     }
 
@@ -21,14 +21,19 @@ export class React {
 }
 
 function convertToHtml(virtualNode) {
-  console.log(virtualNode);
-
-  if (typeof virtualNode === 'string' || typeof virtualNode === 'number') {
+  if (typeof virtualNode === "string" || typeof virtualNode === "number") {
     return document.createTextNode(`${virtualNode}`);
   }
 
-  const $domElement = document.createElement(virtualNode.tagName);
+  const $domElement = document.createElement(virtualNode.tagName) as HTMLElement;
 
+  Object.keys(virtualNode.props)
+    .filter((p) => p !== "children")
+    .forEach((pKey) => {
+      const xKey = pKey === 'className' ? 'class' : pKey;
+      const xValue = virtualNode.props[pKey];
+      $domElement.setAttribute(xKey, xValue)
+    });
   virtualNode.props.children.forEach((virtualChild) => {
     $domElement.appendChild(convertToHtml(virtualChild));
   });
@@ -38,7 +43,6 @@ function convertToHtml(virtualNode) {
 
 export function render(initialVirtualTree, $domRoot) {
   const $appHTML = convertToHtml(initialVirtualTree);
-  console.log('$appHTML', $appHTML);
   $domRoot.appendChild($appHTML);
 }
 
@@ -48,7 +52,7 @@ function createElement(elementType, props, ...children) {
     children,
   };
 
-  if (typeof elementType === 'function') {
+  if (typeof elementType === "function") {
     return elementType(virtualElementProps);
   }
 
