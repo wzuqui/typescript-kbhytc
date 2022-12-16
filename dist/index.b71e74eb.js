@@ -536,7 +536,6 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _react = require("./lib/react");
 var _app = require("./app");
 var _appDefault = parcelHelpers.interopDefault(_app);
-console.log((0, _appDefault.default));
 (0, _react.render)((0, _react.React).createElement((0, _appDefault.default), null), document.querySelector("#app"));
 
 },{"./lib/react":"bfUIQ","./app":"41oNQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bfUIQ":[function(require,module,exports) {
@@ -563,6 +562,10 @@ function convertToHtml(virtualNode) {
     Object.keys(virtualNode.props).filter((p)=>p !== "children").forEach((pKey)=>{
         const xKey = pKey === "className" ? "class" : pKey;
         const xValue = virtualNode.props[pKey];
+        if (xKey.includes("on")) {
+            $domElement.addEventListener(xKey.replace("on", ""), xValue);
+            return;
+        }
         $domElement.setAttribute(xKey, xValue);
     });
     virtualNode.props.children.forEach((virtualChild)=>{
@@ -627,11 +630,14 @@ const myStyle = (0, _css.css)`
   color: #fff;
 `;
 function App(props) {
-    console.log(myStyle);
+    function handleClick() {
+        console.log("aqui");
+    }
     return (0, _react.React).createElement("section", {
         className: myStyle
     }, (0, _react.React).createElement("h1", null, "Contador"), (0, _react.React).createElement("div", null, (0, _react.React).createElement("div", null, "0"), (0, _react.React).createElement((0, _button.Button), {
-        texto: "Incrementar"
+        texto: "Incrementar",
+        onClick: handleClick
     }), (0, _react.React).createElement((0, _button.Button), {
         texto: "Descrementar"
     })));
@@ -644,7 +650,9 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Button", ()=>Button);
 var _react = require("../lib/react");
 function Button(props) {
-    return (0, _react.React).createElement("button", null, props.texto);
+    return (0, _react.React).createElement("button", {
+        onclick: props.onClick
+    }, props.texto);
 }
 
 },{"../lib/react":"bfUIQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gyRZs":[function(require,module,exports) {

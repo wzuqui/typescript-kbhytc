@@ -32,6 +32,10 @@ function convertToHtml(virtualNode) {
     .forEach((pKey) => {
       const xKey = pKey === 'className' ? 'class' : pKey;
       const xValue = virtualNode.props[pKey];
+      if (xKey.includes('on')) {
+        $domElement.addEventListener(xKey.replace('on', ''), xValue)
+        return;
+      }
       $domElement.setAttribute(xKey, xValue)
     });
   virtualNode.props.children.forEach((virtualChild) => {

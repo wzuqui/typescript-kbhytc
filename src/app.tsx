@@ -9,13 +9,15 @@ const myStyle = css`
 `
 
 export default function App(props) {
-  console.log(myStyle)
+  function handleClick() {
+    console.log('aqui')
+  }
   return (
     <section className={myStyle}>
       <h1>Contador</h1>
       <div>
         <div>0</div>
-        <Button texto="Incrementar" />
+        <Button texto="Incrementar" onClick={handleClick} />
         <Button texto="Descrementar" />
       </div>
     </section>
